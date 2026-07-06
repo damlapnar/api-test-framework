@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Create reports directory
+        run: mkdir -p reports
+
       - name: Run smoke tests
         run: pytest -m smoke --tb=short -p no:xdist
         env:
