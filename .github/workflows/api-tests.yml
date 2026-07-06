@@ -25,11 +25,15 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run smoke tests
-        run: pytest -m smoke --tb=short
+        run: pytest -m smoke --tb=short -p no:xdist
+        env:
+          BASE_URL: https://reqres.in/api
 
       - name: Run full regression
-        run: pytest -m regression --tb=short
+        run: pytest -m regression --tb=short -p no:xdist
         if: github.ref == 'refs/heads/main'
+        env:
+          BASE_URL: https://reqres.in/api
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
