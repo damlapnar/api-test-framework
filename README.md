@@ -2,7 +2,8 @@
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white)
+[![CI](https://github.com/damlapnar/api-test-framework/actions/workflows/api-tests.yml/badge.svg)](https://github.com/damlapnar/api-test-framework/actions/workflows/api-tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 REST API test framework built with Python and pytest. Features a reusable HTTP client, JSON schema validation, parallel execution, and CI/CD integration.
 
