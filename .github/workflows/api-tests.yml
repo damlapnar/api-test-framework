@@ -9,39 +9,57 @@ on:
     - cron: '0 7 * * 1-5'
 
 jobs:
-  test:
+  smoke-tests:
+    name: Smoke Tests
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
-
+          python-version: '3.11'
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Create reports directory
-        run: mkdir -p reports
-
       - name: Run smoke tests
-        run: pytest -m smoke --tb=short -p no:xdist
+        run: |
+          pytest -m smoke -v             --html=reports/smoke-report.html             --self-contained-html             --tb=short             -q 2>&1 | tee /tmp/pytest_out.txt
         env:
           BASE_URL: https://dummyjson.com
-
-      - name: Run full regression
-        run: pytest -m regression --tb=short -p no:xdist
-        if: github.ref == 'refs/heads/main'
-        env:
-          BASE_URL: https://dummyjson.com
-
-      - name: Upload HTML report
+      - name: Write step summary
+        if: always()
+        run: |
+          echo "## API Smoke Test Results" >> $GITHUB_STEP_SUMMARY
+          grep -E "passed|failed|error" /tmp/pytest_out.txt | tail -3 >> $GITHUB_STEP_SUMMARY || true
+      - name: Upload report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: api-test-report
+          name: smoke-report
           path: reports/
-          retention-days: 30
+
+  regression-tests:
+    name: Regression Tests
+    runs-on: ubuntu-latest
+    needs: smoke-tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run regression tests
+        run: |
+          pytest -v             --html=reports/regression-report.html             --self-contained-html             --tb=short             -q 2>&1 | tee /tmp/pytest_reg.txt
+        env:
+          BASE_URL: https://dummyjson.com
+      - name: Write step summary
+        if: always()
+        run: |
+          echo "## API Regression Test Results" >> $GITHUB_STEP_SUMMARY
+          grep -E "passed|failed|error" /tmp/pytest_reg.txt | tail -3 >> $GITHUB_STEP_SUMMARY || true
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: regression-report
+          path: reports/
