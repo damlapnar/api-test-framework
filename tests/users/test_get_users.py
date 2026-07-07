@@ -6,20 +6,21 @@ from utils.schema_validator import validate_schema
 @pytest.mark.smoke
 class TestGetUsers:
     def test_get_users_returns_200(self, api_client):
-        response = api_client.get("/users?page=1")
+        response = api_client.get("/users")
         assert response.status_code == 200
 
     def test_get_users_returns_list(self, api_client):
-        response = api_client.get("/users?page=1")
+        response = api_client.get("/users")
         body = response.json()
-        assert "data" in body
-        assert isinstance(body["data"], list)
-        assert len(body["data"]) > 0
+        assert "users" in body
+        assert isinstance(body["users"], list)
+        assert len(body["users"]) > 0
 
-    def test_get_users_page_2(self, api_client):
-        response = api_client.get("/users?page=2")
+    def test_get_users_second_page(self, api_client):
+        response = api_client.get("/users?limit=10&skip=10")
         body = response.json()
-        assert body["page"] == 2
+        assert body["skip"] == 10
+        assert "users" in body
 
     def test_get_single_user_returns_200(self, api_client):
         response = api_client.get("/users/2")
@@ -33,7 +34,7 @@ class TestGetUsers:
     def test_get_single_user_correct_id(self, api_client):
         response = api_client.get("/users/2")
         body = response.json()
-        assert body["data"]["id"] == 2
+        assert body["id"] == 2
 
     def test_get_nonexistent_user_returns_404(self, api_client):
         response = api_client.get("/users/9999")
@@ -43,4 +44,4 @@ class TestGetUsers:
     def test_all_users_are_retrievable(self, api_client, user_id):
         response = api_client.get(f"/users/{user_id}")
         assert response.status_code == 200
-        assert response.json()["data"]["id"] == user_id
+        assert response.json()["id"] == user_id
