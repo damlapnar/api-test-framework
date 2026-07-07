@@ -7,7 +7,7 @@ load_dotenv()
 
 class APIClient:
     def __init__(self, base_url: str = None):
-        self.base_url = base_url or os.getenv("BASE_URL", "https://reqres.in/api")
+        self.base_url = base_url or os.getenv("BASE_URL", "https://dummyjson.com")
         self.session = requests.Session()
         self.session.headers.update({"Content-Type": "application/json"})
 
