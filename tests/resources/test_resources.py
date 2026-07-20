@@ -1,6 +1,7 @@
 import pytest
 
 
+@pytest.mark.products
 @pytest.mark.regression
 class TestResources:
     def test_get_products_returns_200(self, api_client):

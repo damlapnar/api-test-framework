@@ -6,3 +6,5 @@ reports/
 *.egg-info/
 dist/
 .allure-results/
+venv/
+.venv/

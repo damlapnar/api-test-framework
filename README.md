@@ -14,22 +14,23 @@ REST API test framework built with Python and pytest. Features a reusable HTTP c
 - **Fixtures** — session-scoped API client and auth token
 - **Parametrized Tests** — data-driven test cases
 - **Parallel Execution** — `pytest-xdist` for faster runs
-- **Markers** — `smoke`, `regression`, `auth`, `users` test suites
+- **Markers** — `smoke`, `regression`, `auth`, `users`, `products` test suites
 - **HTML Reports** — auto-generated after each run
 
 ## Project Structure
 
 ```
 api-test-framework/
+├── conftest.py        # Shared fixtures (api_client, auth_token, new_user_payload)
 ├── tests/
-│   ├── users/        # User CRUD tests
-│   └── auth/         # Authentication tests
-├── fixtures/
-│   └── conftest.py   # Shared fixtures
+│   ├── users/         # User CRUD, search/filter
+│   ├── auth/          # Authentication tests
+│   ├── resources/     # Product endpoint tests
+│   └── error_handling/# 404s, validation, content-type checks
 ├── utils/
-│   ├── api_client.py # HTTP client wrapper
+│   ├── api_client.py  # HTTP client wrapper
 │   └── schema_validator.py
-├── schemas/          # JSON schema definitions
+├── schemas/           # JSON schema definitions
 └── .github/workflows/
 ```
 
