@@ -5,7 +5,7 @@ Thank you for your interest in contributing!
 ## Getting Started
 
 ```bash
-git clone https://github.com/damlapinar/api-test-framework.git
+git clone https://github.com/damlapnar/api-test-framework.git
 cd api-test-framework
 python -m venv venv
 source venv/bin/activate
